@@ -38,6 +38,10 @@ public class CorsoDAO {
 
 				// Crea un nuovo JAVA Bean Corso
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
+			    
+				Corso c = new Corso(codins,numeroCrediti,nome,periodoDidattico);
+				corsi.add(c);
+			
 			}
 
 			return corsi;
@@ -58,8 +62,77 @@ public class CorsoDAO {
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
+		
+		final String sql = "SELECT studente.* "+ 
+				"FROM studente, iscrizione,corso "+
+				"WHERE corso.codins = ? "+
+				"AND iscrizione.codins = corso.codins "+
+				"AND iscrizione.matricola = studente.matricola ";
+
+		List<Studente> result = new LinkedList<Studente>();
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, corso.getCodins());
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				int matricola = rs.getInt("matricola");
+				String cognome = rs.getString("cognome");
+				String nome = rs.getString("nome");
+				String cds = rs.getString("CDS");
+
+				System.out.println(matricola + " " + cognome + " " + nome + " " + cds);
+				Studente temp = new Studente(matricola,cognome,nome,cds);
+				result.add(temp);
+			
+			}
+
+			return result;
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+		
+		
+	}
+	
+	public boolean studenteIscrittoACorso(Studente studente, Corso corso) {
+		
+		
+		final String sql = "SELECT iscrizione.* " + 
+				"FROM studente,iscrizione " + 
+				"WHERE iscrizione.codins = ? ";
+
+		boolean result = false;
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, corso.getCodins());
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				int matricola = rs.getInt("matricola");
+				//String codins = rs.getString("codins");
+
+				if(studente.getMatricola() == matricola) {
+					result = true;
+				}
+			
+			}
+
+			return result;
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
 	}
 
 	/*
