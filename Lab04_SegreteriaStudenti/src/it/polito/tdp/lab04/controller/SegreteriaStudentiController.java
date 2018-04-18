@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
+import it.polito.tdp.lab04.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,26 +61,67 @@ public class SegreteriaStudentiController {
 
     @FXML
     void CercaNomeCognomeDataMatricola(ActionEvent event) {
+    	
+    	txtNome.clear();
+    	txtCognome.clear();
+    	
+    	if(txtMatricola.getText().compareTo("") == 0) {
+    		txtResult.appendText("Nessuna matricola selezionata \n");
+    	}
+    	
+    	String a = model.dataMatricolaNomeCognome(Integer.parseInt(txtMatricola.getText()));
+    	int i = 0;
+    	String[] vet = new String[2];
+    	
+    	for(String b : a.split(" ")) {
+    		vet[i] = b;
+    		i++;
+    	}
+    	
+    	txtNome.appendText(vet[0]);
+    	txtCognome.appendText(vet[1]);
+    	
 
     }
 
     @FXML
-    void IscrittiCorso(ActionEvent event) {
+    void IscrittiCorso(ActionEvent event) {//btnIscrittiCorso
+    	
+    	if(choiceBox.getValue()== null) {
+    		txtResult.appendText("Nessun corso selezionato \n");
+    	}
+    	
+    	txtResult.appendText(model.studentiIscrittiACorso(choiceBox.getValue()).toString());
 
     }
 
     @FXML
     void carcaCorsi(ActionEvent event) {
+    	
+    	if(txtMatricola.getText().compareTo("") == 0) {
+    		txtResult.appendText("Nessuna matricola selezionata \n");
+    	}
+    	
+    	Studente s = model.cercaStudenteDataMatricola(Integer.parseInt(txtMatricola.getText()));
+    	txtResult.appendText(model.corsiACuiIscrittoStudente(s));
+    	
 
     }
 
     @FXML
     void iscrivi(ActionEvent event) {
+    	
+    	
 
     }
 
     @FXML
     void reset(ActionEvent event) {
+    	txtResult.clear();
+    	txtMatricola.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	
 
     }
 

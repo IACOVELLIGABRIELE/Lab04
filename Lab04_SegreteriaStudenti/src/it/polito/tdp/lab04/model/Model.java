@@ -22,6 +22,14 @@ public class Model {
 		return s.getTuttiIStudenti();
 	}
 	
+	public Studente cercaStudenteDataMatricola(int matricola) {
+		for(Studente a : s.getTuttiIStudenti()) {
+			if(a.getMatricola() == matricola)
+				return a;
+		}
+		return null;
+	}
+	
 	public String dataMatricolaNomeCognome(int matricola) {
 		    return s.nomeCognomeDataMatricola(matricola);
 	}
@@ -47,6 +55,8 @@ public class Model {
 	public boolean studenteIscrittoCorso(Studente studente, Corso corso) {
 		return c.studenteIscrittoACorso(studente, corso);
 	}
+	
+	
 	
 	
 	
